@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Banner from '../../assets/image 1.jpg'
-import { useForm } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import AuthLayout from '~/layouts/AuthLayout.vue';
 import { AlertCircle, Loader } from 'lucide-vue-next'
 import Alert from '~/components/ui/alert/Alert.vue';
@@ -59,6 +59,8 @@ function onSubmit() {
                             <span>Remember Me</span>
                         </div>
                     </FormInput>
+
+                    <Link href="/forgot-password" class="text-sm underline">Forgot Password</Link>
                 </div>
 
 

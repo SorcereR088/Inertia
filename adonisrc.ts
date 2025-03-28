@@ -10,7 +10,7 @@ export default defineConfig({
   | will be scanned automatically from the "./commands" directory.
   |
   */
-  commands: [() => import('@adonisjs/core/commands'), () => import('@adonisjs/lucid/commands'), () => import('@adocasts.com/dto/commands'), () => import('@adocasts.com/actions/commands')],
+  commands: [() => import('@adonisjs/core/commands'), () => import('@adonisjs/lucid/commands'), () => import('@adocasts.com/dto/commands'), () => import('@adocasts.com/actions/commands'), () => import('@adonisjs/mail/commands')],
 
   /*
   |--------------------------------------------------------------------------
@@ -37,7 +37,8 @@ export default defineConfig({
     () => import('@adonisjs/cors/cors_provider'),
     () => import('@adonisjs/lucid/database_provider'),
     () => import('@adonisjs/auth/auth_provider'),
-    () => import('@adonisjs/inertia/inertia_provider')
+    () => import('@adonisjs/inertia/inertia_provider'),
+    () => import('@adonisjs/mail/mail_provider')
   ],
 
   /*
@@ -48,7 +49,7 @@ export default defineConfig({
   | List of modules to import before starting the application.
   |
   */
-  preloads: [() => import('#start/kernel'), () => import('#start/routes/web'),() => import('#start/routes/auth')],
+  preloads: [() => import('#start/kernel'), () => import('#start/routes/web'), () => import('#start/routes/auth')],
 
   /*
   |--------------------------------------------------------------------------

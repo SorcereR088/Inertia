@@ -23,8 +23,8 @@ const form = useForm({
 
     <div class="w-full h-screen flex items-center justify-center tracking-tight">
         <div class="bg-white w-[450px] h-[480px] rounded-xl shadow-md p-8 opacity-90">
-            <h1 class="text-[1.8rem] font-semibold">Forgot Your Password</h1>
-            <p>Enter your email below, if we find the matching email we will send you a password reset link.</p>
+            <h1 class="text-[1.8rem] font-semibold">Forgot Your Password ?</h1>
+            <p class="mb-4">Enter your email below, if we find the matching email we will send you a password reset link.</p>
 
             <Alert v-if="isSent">
                 <Info class="w-4 h-4" />
@@ -33,12 +33,12 @@ const form = useForm({
             </Alert>
 
             <form @submit.prevent="form.post('/forgot-password', {onSuccess: () => form.reset(), preserveScroll: true})">
-                <FormInput type="email" label="Email" v-model="form.email" :error="form.errors.email">
-                    <Button type="submit" :disable="form.processing">
+                <label class="mb-2 block">Enter Your Email</label>
+                <input type="email" label="Email" v-model="form.email" :error="form.errors.email" class="w-full px-3 py-2 mb-2 border rounded-"></input>
+                    <Button type="submit" :disable="form.processing" class="text-white bg-black w-full">
                         <Loader v-if="form.processing" class="mr-2 w-4 h-4 animate-spin" />
                         Email Reset Link
                     </Button>
-                </FormInput>
             </form>
         </div>
     </div>
