@@ -1,8 +1,12 @@
 import StoreOrganization from '../actions/organizations/store_organization.js'
 import { organizationValidator } from '#validators/organization'
 import type { HttpContext } from '@adonisjs/core/http'
+import SetActiveOrganization from '../actions/organization/http/set_active_organization.js'
+import { inject } from '@adonisjs/core'
 
+@inject()
 export default class OrganizationsController {
+  constructor(protected setActiveOrganization: SetActiveOrganization) {}
   async create({ inertia }: HttpContext) {
     return inertia.render('organizations/create')
   }
@@ -13,7 +17,7 @@ export default class OrganizationsController {
       user: auth.use('web').user!,
       data,
     })
-
+    
     return response.redirect().toPath('/')
   }
 }

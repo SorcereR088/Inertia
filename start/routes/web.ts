@@ -2,9 +2,9 @@ const OrganizationsController = () => import('#controllers/organizations_control
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
-router.on('/').renderInertia('home')
 
 router.group(() => {
+  router.on('/').renderInertia('home').use(middleware.organization())
     router.get('/organizations/create', [OrganizationsController, 'create']).as('organization.create')
     router.post('/organizations', [OrganizationsController, 'store']).as('organization.store')
   }).use(middleware.auth())

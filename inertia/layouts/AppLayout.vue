@@ -11,8 +11,11 @@ import Button from '~/components/ui/button/Button.vue';
 import { UserCircle } from 'lucide-vue-next';
 import { Link } from '@inertiajs/vue3';
 import ToastManager from '~/components/ToastManager.vue';
+import OrganizationDto from '#dtos/organization';
 
 const props = defineProps<{
+    organization: OrganizationDto
+    organizations: OrganizationDto[]
     user: UserDto
     messages: Record<string,string | Record<string, string>>
 }>();
@@ -22,8 +25,8 @@ const props = defineProps<{
 <template>
     <div class="flex min-h-screen w-full flex-col">
         <header class="sticky top-0 z-50 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+            
             <Navigation v-bind="props" />
-
             <div class="flex flex-1 items-center justify-end">
                 <DropdownMenu>
                     <DropdownMenuTrigger as-child>

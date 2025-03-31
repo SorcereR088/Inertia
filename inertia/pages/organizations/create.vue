@@ -29,7 +29,7 @@ const form = useForm({
             <form @submit.prevent="form.post('/organizations')">
                 <div class="grid gap-3">
                     <!-- <FormInput label="Name" v-model="form.name" :error="form.errors.name" /> -->
-                    <input class="w-full bg-gray-50 p-2 rounded-md" type="text" v-model="form.name">
+                    <input class="w-full bg-white border p-2 rounded-md" type="text" v-model="form.name">
                     <div v-if="form.errors.name" class="text-red-500 text-sm h-5">{{ form.errors.name }}</div>
                     <Button :disabled="form.processing" class="text-white">
                         <Loader v-if="form.processing" class="mr-2 h-4 w-4 animate-spin" />
