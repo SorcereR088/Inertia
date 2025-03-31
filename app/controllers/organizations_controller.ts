@@ -17,7 +17,15 @@ export default class OrganizationsController {
       user: auth.use('web').user!,
       data,
     })
+
+    this.setActiveOrganization.handle({id: organization.id})
     
+    return response.redirect().toPath('/')
+  }
+
+  async active({response, params}: HttpContext){
+    this.setActiveOrganization.handle({id: params.id})
+
     return response.redirect().toPath('/')
   }
 }

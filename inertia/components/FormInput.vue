@@ -1,5 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import Input from './ui/input/Input.vue';
+import Label from './ui/label/Label.vue';
+import Select from './ui/select/Select.vue';
+import SelectTrigger from './ui/select/SelectTrigger.vue';
+import SelectValue from './ui/select/SelectValue.vue';
+import SelectContent from './ui/select/SelectContent.vue';
+
+
 
 const props = withDefaults(
   defineProps<{
@@ -46,7 +54,7 @@ defineExpose({
         <Input
           ref="inputEl"
           v-model="internalValue"
-          class="pl-10"
+          class="pl-10" 
           :disabled="disabled"
           :required="required"
         />
@@ -69,6 +77,7 @@ defineExpose({
       </Select>
       <Input
         v-else
+        class="border-gray-400 rounded-md"
         v-model="internalValue"
         ref="inputEl"
         :type="type"
