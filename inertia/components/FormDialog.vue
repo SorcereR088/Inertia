@@ -15,7 +15,7 @@ const props = defineProps<{
     resource: string
 }>()
 
-const emit = defineEmits(['update:open', 'submit'])
+const emit = defineEmits(['update:open','update', 'create'])
 const internalOpen = computed({
     get: () => props.open,
     set: (value) => emit('update:open', value)
@@ -32,7 +32,7 @@ const internalOpen = computed({
                 </slot>
             </DialogHeader>
 
-            <form :id="resource" class="grid gap-4 py-4" @submit.prevent="$emit('submit')">
+            <form :id="resource" class="grid gap-4 py-4" @submit.prevent="editing ? $emit('update') : $emit('create')">
                 <slot></slot>
             </form>
 

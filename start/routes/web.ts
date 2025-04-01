@@ -8,4 +8,5 @@ router.group(() => {
     router.get('/organizations/create', [OrganizationsController, 'create']).as('organization.create')
     router.post('/organizations', [OrganizationsController, 'store']).as('organization.store')
     router.get('/organizations/:id', [OrganizationsController, 'active']).as('organizations.active')
+    router.put('/organizations/:id', [OrganizationsController, 'update']).as('organizations.update')
   }).use(middleware.auth())

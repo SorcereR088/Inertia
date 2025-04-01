@@ -3,6 +3,7 @@ import { organizationValidator } from '#validators/organization'
 import type { HttpContext } from '@adonisjs/core/http'
 import SetActiveOrganization from '../actions/organization/http/set_active_organization.js'
 import { inject } from '@adonisjs/core'
+import UpdateOrgnization from '../actions/organizations/update_orgnization.js'
 
 @inject()
 export default class OrganizationsController {
@@ -18,14 +19,26 @@ export default class OrganizationsController {
       data,
     })
 
-    this.setActiveOrganization.handle({id: organization.id})
-    
+    this.setActiveOrganization.handle({ id: organization.id })
+
     return response.redirect().toPath('/')
   }
 
-  async active({response, params}: HttpContext){
-    this.setActiveOrganization.handle({id: params.id})
+  async active({ response, params }: HttpContext) {
+    this.setActiveOrganization.handle({ id: params.id })
 
     return response.redirect().toPath('/')
+  }
+
+  async update({ response, request, params, auth }: HttpContext) {
+    const data = await request.validateUsing(organizationValidator)
+
+    await UpdateOrgnization.handle({
+      user: auth.user!,
+      id: params.id,
+      data,
+    })
+
+    return response.redirect().back()
   }
 }

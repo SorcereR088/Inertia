@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue';
-import { router, useForm } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import { ChevronsUpDown } from 'lucide-vue-next';
 import Button from './ui/button/Button.vue';
 import OrganizationDto from '#dtos/organization';
@@ -14,6 +14,7 @@ import DropdownMenuRadioItem from './ui/dropdown-menu/DropdownMenuRadioItem.vue'
 import DropdownMenuItem from './ui/dropdown-menu/DropdownMenuItem.vue';
 import FormDialog from './FormDialog.vue';
 import FormInput from './FormInput.vue';
+import { useResourceActions } from '~/composables/resource_actions';
 
 const props = defineProps<{
     organization: OrganizationDto
@@ -21,26 +22,16 @@ const props = defineProps<{
 }>()
 
 const organizationId = ref(props.organization.id.toString())
-const isDialogOpen = ref(false)
 
-const dialogForm = useForm({
-    name: ''
+const { form, dialog, onSuccess } = useResourceActions<OrganizationDto>()({
+    name: '',
 })
 
-function onOrganizationChange(activeId: string){
+function onOrganizationChange(activeId: string) {
     router.get(`/organizations/${activeId}`)
 }
 
 watchEffect(() => (organizationId.value = props.organization.id.toString()))
-
-function onSubmit() {
-    dialogForm.post('/organizations', {
-        onSuccess: () => {
-            dialogForm.reset()
-            isDialogOpen.value = false
-        }
-    })
-}
 
 </script>
 
@@ -67,13 +58,23 @@ function onSubmit() {
             </DropdownMenuRadioGroup>
 
             <DropdownMenuSeparator />
+            <DropdownMenuItem @click="dialog.open(organization, { name: organization.name })"><span
+                    class="text-orange-500 cursor-pointer font-semibold">Edit:</span> {{ organization.name
+                }}</DropdownMenuItem>
 
-            <DropdownMenuItem @click="isDialogOpen = true">Add Organization</DropdownMenuItem>
+            <DropdownMenuItem><span class="text-red-500 cursor-pointer font-semibold">Delete:</span> {{
+                organization.name }}</DropdownMenuItem>
 
-            <FormDialog resource="Organization" v-model:open="isDialogOpen" :processing="dialogForm.processing"
-                @submit="onSubmit">
-                <FormInput label="Name" v-model="dialogForm.name" :error="dialogForm.errors.name" />
-            </FormDialog>
+                <DropdownMenuSeparator />
+            <DropdownMenuItem @click="dialog.open()">Add Organization</DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>
+
+
+
+    <FormDialog resource="Organization" v-model:open="dialog.isOpen" :editing="dialog.resource?.id"
+        :processing="form.processing" @create="form.post('/organizations', { onSuccess })"
+        @update=" form.put(`/organizations/${organization.id}`, { onSuccess })">
+        <FormInput label="Name" v-model="form.name" :error="form.errors.name" />
+    </FormDialog>
 </template>
