@@ -4,10 +4,11 @@ import OrganizationDto from '#dtos/organization';
 import { ref, watchEffect } from 'vue';
 import { useResourceActions } from '~/composables/resource_actions';
 import AppHead from '~/components/AppHead.vue';
-import { Plus, Pencil } from 'lucide-vue-next';
+import { Plus, Pencil, Trash2 } from 'lucide-vue-next';
 import FormInput from '~/components/FormInput.vue';
 import FormDialog from '~/components/FormDialog.vue';
 import Button from '~/components/ui/button/Button.vue';
+import ConfirmDestroyDialog from '~/components/ConfirmDestroyDialog.vue';
 
 const props = defineProps<{
     difficulties: DifficultyDto[]
@@ -29,6 +30,10 @@ function onEdit(resource: DifficultyDto){
     })
 }
 
+
+function onDestroyShow(resource : DifficultyDto){
+    destroy.value.open(resource)
+}
 
 </script>
 
@@ -56,7 +61,11 @@ function onEdit(resource: DifficultyDto){
 
                 <div class="flex gap-2 opacity-0 group-hover:opacity-100 duration-300">
                     <Button size="sm" @click="onEdit(item)">
-                        <Pencil class="w-3 h-3 text-white" aria-label="Edit Difficulty" />
+                        <Pencil class="w-3 h-3 text-white" aria-label="`Edit Difficulty" />
+                    </Button>
+
+                    <Button size="sm" class=" text-white" @click="onDestroyShow(item)">
+                        <Trash2 class="w-3 h-3 text-white" aria-label="Delete Difficuly" /> 
                     </Button>
                 </div>
             </li>
@@ -72,5 +81,13 @@ function onEdit(resource: DifficultyDto){
             <FormInput label="Name" v-model="form.name" :error="form.errors.name" />
             <FormInput type="color" label="Color" v-model="form.color" :error="form.errors.color" />
         </FormDialog>
+
+        <ConfirmDestroyDialog
+            v-model:open="destroy.isOpen"
+            title="Delete DIfficulty ?"
+            :action-href="`/difficulties/${destroy.resource?.id}`"
+        >
+            Are you sure you'd like to delete your <strong>{{ destroy.resource?.name }}</strong> difficulty ?
+        </ConfirmDestroyDialog>
     </div>
 </template>
