@@ -20,7 +20,7 @@ export default class Difficulty extends compose(BaseModel, WithOrganization) {
   declare order: number
 
   @column()
-  declare isDefault: boolean
+  declare is_default: boolean
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -32,5 +32,5 @@ export default class Difficulty extends compose(BaseModel, WithOrganization) {
   declare courses: HasMany<typeof Course>
 
   @hasMany(() => Lesson)
-  declare lessons: HasMany<typeof Lesson>
+  declare lesson: HasMany<typeof Lesson>
 }

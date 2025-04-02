@@ -27,7 +27,7 @@ const props = defineProps<{
       <Slash class="w-4 h-4 text-slate-300 -rotate-12" />
     </div>
 
-    <Link href="/courses" class="desktop-link" :class="{ active: $page.url.startsWith('/courses') }" prefetch
+    <Link href="/courses" class="dbg-background esktop-link" :class="{ active: $page.url.startsWith('/courses') }" prefetch
       :cache-for="['5s', '1m']">
     Courses
     </Link>

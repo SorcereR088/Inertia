@@ -53,9 +53,10 @@ const props = defineProps<{
                 </DropdownMenu>
             </div>
         </header>
-        <main class="flex flex-1">
+        
+        <slot class="flex flex-1">
             
-        </main>
+        </slot>
 
         <ToastManager :messages="messages"/>
     </div>
