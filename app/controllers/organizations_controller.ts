@@ -4,6 +4,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import SetActiveOrganization from '../actions/organization/http/set_active_organization.js'
 import { inject } from '@adonisjs/core'
 import UpdateOrgnization from '../actions/organizations/update_orgnization.js'
+import DestroyOrganizations from '../actions/organizations/destroy_organizations.js'
 
 @inject()
 export default class OrganizationsController {
@@ -40,5 +41,16 @@ export default class OrganizationsController {
     })
 
     return response.redirect().back()
+  }
+
+  async destroy({params, response,session, auth}: HttpContext){
+    const organization = await DestroyOrganizations.handle({
+      user: auth.user!,
+      id: params.id
+    })
+
+    session.flash('success',`Your ${organization.name} has been deleted`)
+
+    return response.redirect().toPath('/')
   }
 }

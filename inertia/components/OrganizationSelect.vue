@@ -15,6 +15,7 @@ import DropdownMenuItem from './ui/dropdown-menu/DropdownMenuItem.vue';
 import FormDialog from './FormDialog.vue';
 import FormInput from './FormInput.vue';
 import { useResourceActions } from '~/composables/resource_actions';
+import ConfirmDestroyDialog from './ConfirmDestroyDialog.vue';
 
 const props = defineProps<{
     organization: OrganizationDto
@@ -23,7 +24,7 @@ const props = defineProps<{
 
 const organizationId = ref(props.organization.id.toString())
 
-const { form, dialog, onSuccess } = useResourceActions<OrganizationDto>()({
+const { form, dialog, destroy, onSuccess } = useResourceActions<OrganizationDto>()({
     name: '',
 })
 
@@ -60,12 +61,13 @@ watchEffect(() => (organizationId.value = props.organization.id.toString()))
             <DropdownMenuSeparator />
             <DropdownMenuItem @click="dialog.open(organization, { name: organization.name })"><span
                     class="text-orange-500 cursor-pointer font-semibold">Edit:</span> {{ organization.name
-                }}</DropdownMenuItem>
+                    }}</DropdownMenuItem>
 
-            <DropdownMenuItem><span class="text-red-500 cursor-pointer font-semibold">Delete:</span> {{
-                organization.name }}</DropdownMenuItem>
+            <DropdownMenuItem @click="destroy.open(organization)"><span
+                    class="text-red-500 cursor-pointer font-semibold">Delete:</span> {{
+                        organization.name }}</DropdownMenuItem>
 
-                <DropdownMenuSeparator />
+            <DropdownMenuSeparator />
             <DropdownMenuItem @click="dialog.open()">Add Organization</DropdownMenuItem>
         </DropdownMenuContent>
     </DropdownMenu>
@@ -77,4 +79,12 @@ watchEffect(() => (organizationId.value = props.organization.id.toString()))
         @update=" form.put(`/organizations/${organization.id}`, { onSuccess })">
         <FormInput label="Name" v-model="form.name" :error="form.errors.name" />
     </FormDialog>
+    
+    <ConfirmDestroyDialog 
+    v-model:open="destroy.isOpen" 
+    title="Delete Organization ?"
+    :action-href="`/organizations/${destroy.resource?.id}`">
+    Are you sure you'd like to delete your <strong>{{ destroy.resource?.name }}</strong> organization? All data
+    associated with this organization, including courses and lessons, will all be deleted forever.
+</ConfirmDestroyDialog>
 </template>
