@@ -16,7 +16,7 @@ export default class AccessLevelDto extends BaseModelDto {
   declare organization: OrganizationDto | null
   declare courses: CourseDto[]
   declare lesson: LessonDto[]
-
+  declare meta: Record<string, any>
   constructor(accessLevel?: AccessLevel) {
     super()
 
@@ -26,11 +26,13 @@ export default class AccessLevelDto extends BaseModelDto {
     this.name = accessLevel.name
     this.color = accessLevel.color
     this.order = accessLevel.order
-    this.is_default = accessLevel.is_default
+    this.is_default = accessLevel.isDefault
     this.createdAt = accessLevel.createdAt.toISO()!
     this.updatedAt = accessLevel.updatedAt.toISO()!
     this.organization = accessLevel.organization && new OrganizationDto(accessLevel.organization)
     this.courses = CourseDto.fromArray(accessLevel.courses)
-    this.lesson = LessonDto.fromArray(accessLevel.lesson)
+    this.lesson = LessonDto.fromArray(accessLevel.lessons)
+
+    this.meta = accessLevel.$extras
   }
 }

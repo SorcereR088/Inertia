@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DifficultyDto from '#dtos/difficulty';
 import OrganizationDto from '#dtos/organization';
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect,computed } from 'vue';
 import { useResourceActions } from '~/composables/resource_actions';
 import AppHead from '~/components/AppHead.vue';
 import { Plus, Pencil, Trash2 } from 'lucide-vue-next';
@@ -9,6 +9,7 @@ import FormInput from '~/components/FormInput.vue';
 import FormDialog from '~/components/FormDialog.vue';
 import Button from '~/components/ui/button/Button.vue';
 import ConfirmDestroyDialog from '~/components/ConfirmDestroyDialog.vue';
+import SelectItem from '~/components/ui/select/SelectItem.vue';
 
 const props = defineProps<{
     difficulties: DifficultyDto[]
@@ -21,9 +22,13 @@ const { form, dialog, destroy, onSuccess } = useResourceActions<DifficultyDto>()
     color: '#818cf8'
 })
 
+const replacementOptions = computed(() => {
+    return props.difficulties.filter((item) => item.id !== destroy.value.resource?.id)
+})
+
 watchEffect(() => (list.value = props.difficulties))
 
-function onEdit(resource: DifficultyDto){
+function onEdit(resource: DifficultyDto) {
     dialog.value.open(resource, {
         name: resource.name,
         color: resource.color
@@ -31,8 +36,11 @@ function onEdit(resource: DifficultyDto){
 }
 
 
-function onDestroyShow(resource : DifficultyDto){
-    destroy.value.open(resource)
+function onDestroyShow(resource: DifficultyDto) {
+    const replacement = replacementOptions.value.at(0)
+    destroy.value.open(resource, {
+        replacementId: replacement?.id.toString()
+    })
 }
 
 </script>
@@ -65,29 +73,39 @@ function onDestroyShow(resource : DifficultyDto){
                     </Button>
 
                     <Button size="sm" class=" text-white" @click="onDestroyShow(item)">
-                        <Trash2 class="w-3 h-3 text-white" aria-label="Delete Difficuly" /> 
+                        <Trash2 class="w-3 h-3 text-white" aria-label="Delete Difficuly" />
                     </Button>
                 </div>
             </li>
         </ul>
 
-        <FormDialog resource="Difficulty"
-        v-model:open="dialog.isOpen"
-        :editing="dialog.resource?.id"
-        :processing="form.processing"
-        @create="form.post('/difficulties', { onSuccess })"
-        @update="form.put(`/difficulties/${dialog.resource?.id}`, {onSuccess})"
-        >
+        <FormDialog resource="Difficulty" v-model:open="dialog.isOpen" :editing="dialog.resource?.id"
+            :processing="form.processing" @create="form.post('/difficulties', { onSuccess })"
+            @update="form.put(`/difficulties/${dialog.resource?.id}`, { onSuccess })">
             <FormInput label="Name" v-model="form.name" :error="form.errors.name" />
             <FormInput type="color" label="Color" v-model="form.color" :error="form.errors.color" />
         </FormDialog>
 
-        <ConfirmDestroyDialog
-            v-model:open="destroy.isOpen"
-            title="Delete DIfficulty ?"
+        <ConfirmDestroyDialog v-model:open="destroy.isOpen" title="Delete Difficulty ?"
             :action-href="`/difficulties/${destroy.resource?.id}`"
-        >
-            Are you sure you'd like to delete your <strong>{{ destroy.resource?.name }}</strong> difficulty ?
+            :action-data="destroy.data"
+            >
+
+            <div v-if="destroy.resource?.meta.courses_count != 0">
+                What difficulty would you like to assign the {{ destroy.resource?.meta.courses_count }} courses using {{
+                    destroy.resource?.name }}
+
+                <FormInput type="select" label="Difficulty" v-model="destroy.data.replacementId" class="mt-4">
+                    <SelectItem v-for="item in replacementOptions" :key="item.id" :value="item.id.toString()">
+                        {{ item.name }}
+                    </SelectItem>
+                </FormInput>
+            </div>
+
+            <div>
+                Are you sure you'd like to delete your <strong>{{ destroy.resource?.name }}</strong> difficulty ?
+                No courses are currently using this difficulty
+            </div>
         </ConfirmDestroyDialog>
     </div>
 </template>

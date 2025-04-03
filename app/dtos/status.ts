@@ -16,6 +16,7 @@ export default class StatusDto extends BaseModelDto {
   declare organization: OrganizationDto | null
   declare courses: CourseDto[]
   declare lesson: LessonDto[]
+  declare meta: Record<string, any>
 
   constructor(status?: Status) {
     super()
@@ -26,11 +27,13 @@ export default class StatusDto extends BaseModelDto {
     this.name = status.name
     this.color = status.color
     this.order = status.order
-    this.is_default = status.is_default
+    this.is_default = status.isDefault
     this.createdAt = status.createdAt.toISO()!
     this.updatedAt = status.updatedAt.toISO()!
     this.organization = status.organization && new OrganizationDto(status.organization)
     this.courses = CourseDto.fromArray(status.courses)
-    this.lesson = LessonDto.fromArray(status.lesson)
+    this.lesson = LessonDto.fromArray(status.lessons)
+
+    this.meta = status.$extras
   }
 }

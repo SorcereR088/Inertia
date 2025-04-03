@@ -44,28 +44,15 @@ defineExpose({
       <span v-if="label">{{ label }}</span>
 
       <slot v-if="type === 'group'" />
+      
       <div v-else-if="type === 'color'" class="relative items-center w-full">
-        <input
-          v-model="internalValue"
-          type="color"
-          class="absolute inset-y-2 rounded w-6 h-6 start-2"
-          :disabled="disabled"
-        />
-        <Input
-          ref="inputEl"
-          v-model="internalValue"
-          class="pl-10" 
-          :disabled="disabled"
-          :required="required"
-        />
+        <input v-model="internalValue" type="color" class="absolute inset-y-2 rounded w-6 h-6 start-2"
+          :disabled="disabled" />
+        <Input ref="inputEl" v-model="internalValue" class="pl-10" :disabled="disabled" :required="required" />
       </div>
-      <Select
-        v-else-if="type === 'select'"
-        v-model="internalValue"
-        ref="inputEl"
-        :disabled="disabled"
-        :required="required"
-      >
+
+      <Select v-else-if="type === 'select'" v-model="internalValue" ref="inputEl" :disabled="disabled"
+        :required="required">
         <SelectTrigger>
           <slot name="trigger">
             <SelectValue :placeholder="placeholder" />
@@ -75,16 +62,10 @@ defineExpose({
           <slot />
         </SelectContent>
       </Select>
-      <Input
-        v-else
-        class="border-gray-400 rounded-md"
-        v-model="internalValue"
-        ref="inputEl"
-        :type="type"
-        :disabled="disabled"
-        :required="required"
-        :placeholder="placeholder"
-      />
+
+      <Input v-else class="border-gray-400 rounded-md" v-model="internalValue" ref="inputEl" :type="type"
+        :disabled="disabled" :required="required" :placeholder="placeholder" />
+
     </Label>
     <div v-if="error" class="text-red-500 text-sm">
       {{ error }}

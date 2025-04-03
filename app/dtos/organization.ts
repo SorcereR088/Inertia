@@ -15,13 +15,14 @@ export default class OrganizationDto extends BaseModelDto {
   declare createdAt: string
   declare updatedAt: string
   declare courses: CourseDto[]
-  declare moduler: ModuleDto[]
-  declare lesson: LessonDto[]
-  declare difficulty: DifficultyDto[]
+  declare modules: ModuleDto[]
+  declare lessons: LessonDto[]
+  declare difficulties: DifficultyDto[]
   declare accessLevels: AccessLevelDto[]
-  declare status: StatusDto[]
+  declare statuses: StatusDto[]
   declare organizationInvite: OrganizationInviteDto[]
   declare users: UsersDto[]
+
 
   constructor(organization?: Organization) {
     super()
@@ -32,12 +33,12 @@ export default class OrganizationDto extends BaseModelDto {
     this.createdAt = organization.createdAt.toISO()!
     this.updatedAt = organization.updatedAt.toISO()!
     this.courses = CourseDto.fromArray(organization.courses)
-    this.moduler = ModuleDto.fromArray(organization.moduler)
-    this.lesson = LessonDto.fromArray(organization.lesson)
-    this.difficulty = DifficultyDto.fromArray(organization.difficulty)
+    this.modules = ModuleDto.fromArray(organization.modules)
+    this.lessons = LessonDto.fromArray(organization.lessons)
+    this.difficulties = DifficultyDto.fromArray(organization.difficulties)
     this.accessLevels = AccessLevelDto.fromArray(organization.accessLevels)
-    this.status = StatusDto.fromArray(organization.status)
-    this.organizationInvite = OrganizationInviteDto.fromArray(organization.organizationInvite)
+    this.statuses = StatusDto.fromArray(organization.statuses)
+    this.organizationInvite = OrganizationInviteDto.fromArray(organization.invites)
     this.users = UsersDto.fromArray(organization.users)
   }
 }

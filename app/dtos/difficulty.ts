@@ -17,6 +17,10 @@ export default class DifficultyDto extends BaseModelDto {
   declare courses: CourseDto[]
   declare lesson: LessonDto[]
 
+
+  declare meta: Record<string, any>
+
+
   constructor(difficulty?: Difficulty) {
     super()
 
@@ -32,5 +36,7 @@ export default class DifficultyDto extends BaseModelDto {
     this.organization = difficulty.organization && new OrganizationDto(difficulty.organization)
     this.courses = CourseDto.fromArray(difficulty.courses)
     this.lesson = LessonDto.fromArray(difficulty.lesson)
+
+    this.meta = difficulty.$extras
   }
 }

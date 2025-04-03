@@ -1,15 +1,32 @@
-import Organization from "#models/organization"
+import Organization from '#models/organization'
+import { difficultyDestroyVaildator } from '#validators/difficulty'
+import db from '@adonisjs/lucid/services/db'
+import { Infer } from '@vinejs/vine/types'
 
 type Params = {
   organization: Organization
   id: number
+  data: Infer<typeof difficultyDestroyVaildator>
 }
 
 export default class DestroyDifficulty {
-  static async handle({organization, id}: Params) {
-    const difficulty = await organization.related('difficulties').query().where({id}).firstOrFail()
+  static async handle({ organization, id, data }: Params) {
+    await db.transaction(async (trx) => {
+      organization.useTransaction(trx)
 
-    await difficulty.delete()
-    return difficulty
+
+      await organization.related('courses').query().where('difficultyId', id).update({
+        difficultyId: data.replacementId
+      })
+      
+      const difficulty = await organization
+        .related('difficulties')
+        .query()
+        .where({ id })
+        .firstOrFail()
+
+      await difficulty.delete()
+      return difficulty
+    })
   }
 }
