@@ -1,4 +1,5 @@
 import vine from '@vinejs/vine'
+import { existsInOrganization } from './helpers/organizations.js'
 
 export const difficultyValdator = vine.compile(
   vine.object({
@@ -9,15 +10,12 @@ export const difficultyValdator = vine.compile(
 
 export const difficultyDestroyVaildator = vine.withMetaData<{ organizationId: number }>().compile(
   vine.object({
-    replacementId: vine.number().exists(async (db, value, field) => {
-      const result = await db
-        .from('difficulties')
-        .select('id')
-        .where('id', value)
-        .where('organization_id', field.meta.organizationId)
-        .first()
+    replacementId: vine.number().exists(existsInOrganization('difficulties')),
+  })
+)
 
-        return !!result
-    }),
+export const difficultyOrderValidator = vine.compile(
+  vine.object({
+    ids: vine.array(vine.number())
   })
 )

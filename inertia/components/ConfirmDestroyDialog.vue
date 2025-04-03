@@ -45,8 +45,8 @@ const internalOpen = computed({
             <AlertDialogFooter>
                 <AlertDialogCancel>{{ cancelText }}</AlertDialogCancel>
                 <AlertDialogAction as-child>
-                    <Link v-if="actionHref" :href="actionHref" method="delete" :data="actionData" as="button" preserve-scroll>{{ actionText }}</Link>
-                    <Button v-else type="button" variant="destructive" @click="emit('confirm')">{{ actionText }}</Button>
+                    <Link v-if="actionHref" :href="actionHref" method="delete" :data="actionData" as="button" preserve-scroll class="bg-black text-white hover:bg-slate-700">{{ actionText }} </Link>
+                    <Button v-else type="button" variant="destructive" @click="emit('confirm')" >{{ actionText }}</Button>
                 </AlertDialogAction>
             </AlertDialogFooter>
 

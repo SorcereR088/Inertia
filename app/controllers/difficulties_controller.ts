@@ -1,9 +1,11 @@
 import DifficultyDto from '#dtos/difficulty'
-import { difficultyDestroyVaildator, difficultyValdator } from '#validators/difficulty'
+import { difficultyDestroyVaildator, difficultyOrderValidator, difficultyValdator } from '#validators/difficulty'
 import type { HttpContext } from '@adonisjs/core/http'
 import StoreDifficulty from '../actions/difficulties/store_difficulty.js'
 import UpdateDifficulty from '../actions/difficulties/update_difficulty.js'
 import DestroyDifficulty from '../actions/difficulties/destroy_difficulty.js'
+import { withOrganizationMetaData } from '#validators/helpers/organizations'
+import UpdateDifficultyOrder from '../actions/difficulties/update_difficulty_order.js'
 
 export default class DifficultiesController {
   async index({ inertia, organization }: HttpContext) {
@@ -29,12 +31,17 @@ export default class DifficultiesController {
     return response.redirect().back()
   }
 
-  async destroy({params, request, response, organization}:HttpContext){
-    const data = await request.validateUsing(difficultyDestroyVaildator, {
-      meta: {
-        organizationId: organization.id,
-      }
+  async order({request, response, organization}: HttpContext){
+    const {ids} = await request.validateUsing(difficultyOrderValidator)
+    await UpdateDifficultyOrder.handle({
+      organization, ids
     })
+
+    return response.redirect().back()
+  }
+
+  async destroy({params, request, response, organization}:HttpContext){
+    const data = await request.validateUsing(difficultyDestroyVaildator, withOrganizationMetaData(organization.id))
     await DestroyDifficulty.handle({
       id: params.id,
       organization,

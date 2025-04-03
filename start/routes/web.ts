@@ -15,6 +15,7 @@ router.group(() => {
   router.group(() => {
     router.get('/difficulties', [DifficultiesController, 'index']).as('difficulties.index')
     router.post('/difficulties', [DifficultiesController, 'store']).as('difficulties.store')
+    router.put('/difficulties/order', [DifficultiesController, 'order']).as('difficulties.order')
     router.put('/difficulties/:id', [DifficultiesController, 'update']).as('difficulties.update')
     router.delete('/difficulties/:id', [DifficultiesController, 'destroy']).as('difficulties.destroy')
   }).use([middleware.auth(), middleware.organization()]) 
