@@ -13,7 +13,6 @@ export default class WebRegister {
   constructor(protected ctx: HttpContext) {}
 
   async handle({data}: Params) {
-    console.log("receidef:", data)
     const user = await Users.create(data)
 
     await this.ctx.auth.use('web').login(user)

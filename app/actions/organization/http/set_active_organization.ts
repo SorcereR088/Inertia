@@ -11,7 +11,7 @@ export default class SetActiveOrganization {
   constructor(protected ctx: HttpContext) {}
 
   async handle({id}: Params) {
-    this.ctx.organizationId = id
+    this.ctx.organizationId = id  
     this.ctx.response.cookie(activeCookieName, id) 
   }
 }

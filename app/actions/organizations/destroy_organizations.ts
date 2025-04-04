@@ -10,7 +10,6 @@ export default class DestroyOrganizations {
     const organization = await user.related('organizations').query().where('organizations.id', id).firstOrFail()
 
     await organization.delete()
-
     return organization;
   }
 }

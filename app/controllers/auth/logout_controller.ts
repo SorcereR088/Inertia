@@ -7,8 +7,7 @@ export default class LogoutController {
   async handle({ response, session }: HttpContext, webLogout: WebLogout) {
     await webLogout.handle()
 
-    session.flash('success', 'You have been logged out')
-
+    session.flash('success', 'You have been Logged Out')
     return response.redirect().toRoute('/login')
   }
 }

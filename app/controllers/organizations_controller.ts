@@ -9,19 +9,20 @@ import DestroyOrganizations from '../actions/organizations/destroy_organizations
 @inject()
 export default class OrganizationsController {
   constructor(protected setActiveOrganization: SetActiveOrganization) {}
+
+  //Render a organization page
   async create({ inertia }: HttpContext) {
     return inertia.render('organizations/create')
   }
 
+  //Create a organization
   async store({ request, response, auth }: HttpContext) {
     const data = await request.validateUsing(organizationValidator)
     const organization = await StoreOrganization.handle({
       user: auth.use('web').user!,
       data,
     })
-
     this.setActiveOrganization.handle({ id: organization.id })
-
     return response.redirect().toPath('/')
   }
 
@@ -50,7 +51,8 @@ export default class OrganizationsController {
     })
 
     session.flash('success',`Your ${organization.name} has been deleted`)
-
     return response.redirect().toPath('/')
   }
 }
+
+

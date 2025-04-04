@@ -24,6 +24,7 @@ export default class GetActiveOrganization {
     }
     return organization
   }
+  
   #query(){
     return this.ctx.auth
       .use('web')

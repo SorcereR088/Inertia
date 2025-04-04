@@ -21,6 +21,7 @@ export default class StoreOrganization {
     return db.transaction(async (trx) => {
       //1.  create organization
       const organization = await Organization.create(data, { client: trx })
+      
       //2. make this user the admin
       console.log(user)
       const rolePromise = this.#assignAdmin(organization, user)

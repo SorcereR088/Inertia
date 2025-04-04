@@ -4,14 +4,14 @@ import OrganizationDto from '#dtos/organization';
 import { ref, watchEffect, computed } from 'vue';
 import { useResourceActions } from '~/composables/resource_actions';
 import AppHead from '~/components/AppHead.vue';
-import { Plus, Pencil, Trash2, GripVertical } from 'lucide-vue-next';
+import { Plus } from 'lucide-vue-next';
 import FormInput from '~/components/FormInput.vue';
 import FormDialog from '~/components/FormDialog.vue';
 import Button from '~/components/ui/button/Button.vue';
 import ConfirmDestroyDialog from '~/components/ConfirmDestroyDialog.vue';
 import SelectItem from '~/components/ui/select/SelectItem.vue';
-import Sortable from 'vuedraggable'
 import { router } from '@inertiajs/vue3';
+import SortableResourceItem from '~/components/SortableResourceItem.vue';
 
 const props = defineProps<{
     difficulties: DifficultyDto[]
@@ -46,9 +46,9 @@ function onDestroyShow(resource: DifficultyDto) {
 }
 
 
-function onOrderUpdate(){
+function onOrderUpdate() {
     const ids = list.value.map((item) => item.id)
-    router.put('/difficulties/order', {ids}, {preserveScroll: true})
+    router.put('/difficulties/order', { ids }, { preserveScroll: true })
 }
 
 </script>
@@ -56,7 +56,7 @@ function onOrderUpdate(){
 <template>
     <AppHead title="Difficulties" :description="`Manage the difficulties of ${organization?.name || 'Organization'}`" />
 
-    <div class="w-full max-w-2xl mx-auto bg-slate-200 mt-4 rounded-xl p-4">
+    <div class="w-full max-w-2xl mx-auto border mt-4 rounded-xl p-4">
         <div class="flex items-center justify-between mb-3">
             <h1 class="text-2xl font-bold px-4">Difficulties</h1>
 
@@ -66,30 +66,7 @@ function onOrderUpdate(){
             </Button>
         </div>
 
-        <Sortable v-model="list" item-key="id" tag="ul" handle=".handle" class="flex flex-col" @end="onOrderUpdate">
-            <template #item="{ element: item }">
-                <li class="flex items-center justify-between rounded-md px-3 py-1.5 hover:bg-slate-100 duration-300 group ">
-                    <div class="flex items-center gap-4">
-                        <div class="handle text-slate-300 group-hover:text-slate-900 duration-300 cursor-move">
-                            <GripVertical class="w-4 h-4" />
-                        </div>
-                        <div class="w-3 h-3 rounded-full bg-slate-100" :style="{ backgroundColor: item.color }"></div>
-                        <span class="font-bold">{{ item.name }}</span>
-                        <span v-if="item.is_default" class="text-sm text-slate-400">(Default)</span>
-                    </div>
-
-                    <div class="flex gap-2 opacity-0 group-hover:opacity-100 duration-300">
-                        <Button size="sm" @click="onEdit(item)">
-                            <Pencil class="w-3 h-3 text-white" aria-label="`Edit Difficulty" />
-                        </Button>
-
-                        <Button size="sm" class=" text-white" @click="onDestroyShow(item)">
-                            <Trash2 class="w-3 h-3 text-white" aria-label="Delete Difficuly" />
-                        </Button>
-                    </div>
-                </li>
-            </template>
-        </Sortable>
+        <SortableResourceItem v-model="list" @end="onOrderUpdate" @edit="onEdit" @destroy="onDestroyShow" />
 
         <FormDialog resource="Difficulty" v-model:open="dialog.isOpen" :editing="dialog.resource?.id"
             :processing="form.processing" @create="form.post('/difficulties', { onSuccess })"
