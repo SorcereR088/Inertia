@@ -44,6 +44,6 @@ export default class CourseDto extends BaseModelDto {
     this.difficulty = course.difficulty && new DifficultyDto(course.difficulty)
     this.status = course.status && new StatusDto(course.status)
     this.modules = ModuleDto.fromArray(course.modules)
-    this.Lesson = LessonDto.fromArray(course.Lesson)
+    this.Lesson = LessonDto.fromArray(course.lessons)
   }
 }

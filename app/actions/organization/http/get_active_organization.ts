@@ -30,5 +30,8 @@ export default class GetActiveOrganization {
       .use('web')
       .user!.related('organizations')
       .query()
+      .preload('accessLevels', (query) => query.orderBy('order'))
+      .preload('difficulties', (query) => query.orderBy('order'))
+      .preload('statuses', (query) => query.orderBy('order'))
   }
 }

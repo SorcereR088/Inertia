@@ -43,8 +43,14 @@ router.group(() => {
     router.put('/access-levels/order', [accessLevelsController, 'order']).as('access-levels.order')
     router.put('/access-levels/:id', [accessLevelsController, 'update']).as('access-levels.update')
     router.delete('/access-levels/:id', [accessLevelsController, 'destroy']).as('access-levels.destroy')
+
+      //Courses
+    router.get('/courses', [CoursesController, 'index']).as('courses.index')
+    router.post('/courses', [CoursesController, 'store']).as('courses.store')
+    
   }).use([middleware.auth(), middleware.organization()]) 
 
-  //Courses
-router.get('/courses', [CoursesController, 'index']).as('courses.index').use([middleware.auth(), middleware.organization()])
+
+
+
   

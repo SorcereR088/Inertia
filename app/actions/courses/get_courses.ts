@@ -10,6 +10,7 @@ export default class GetCourses {
     .preload('status')
     .preload('difficulty')
     .preload('lessons')
+    .preload('accessLevel')
     .preload('modules')
     .orderBy('order')
   }

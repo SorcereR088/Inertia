@@ -19,14 +19,16 @@ import Button from '~/components/ui/button/Button.vue';
 
 import { EllipsisVertical, Plus } from 'lucide-vue-next';
 import { Link } from '@inertiajs/vue3';
+import CourseActions from '../CourseActions.vue';
 
-
+const actions = ref()
 const props = defineProps<{
   organization: OrganizationDto;
   courses: CourseDto[];
 }>();
 
 const courses = ref<CourseDto[]>(props.courses);
+
 
 watchEffect(() => {
   courses.value = props.courses;
@@ -39,7 +41,7 @@ watchEffect(() => {
   <div class="w-full max-w-screen-xl mx-auto bg-background border rounded-xl py-4 lg:px-4 mt-4">
     <div class="flex items-center justify-between mb-3">
       <h1 class="text-2xl font-bold px-4">Courses</h1>
-      <Button class="sm" variant="ghost">
+      <Button class="sm" variant="ghost" @click="actions.create()">
         <Plus class="w-3 h-3 mr-2" />
         Add Course
       </Button>
@@ -89,5 +91,7 @@ watchEffect(() => {
         </TableRow>
       </TableBody>
     </Table>
+
+    <CourseActions ref="actions" :organization="organization" />
   </div>
 </template>
