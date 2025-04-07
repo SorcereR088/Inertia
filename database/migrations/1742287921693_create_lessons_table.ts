@@ -26,7 +26,7 @@ export default class extends BaseSchema {
         .inTable('modules')
         .notNullable()
         .onDelete('cascade')
-      table.integer('status_is').unsigned().references('id').inTable('statuses').notNullable()
+      table.integer('status_id').unsigned().references('id').inTable('statuses').notNullable()
       table.integer('order').unsigned().notNullable().defaultTo(0)
       table.string('name', 150).notNullable()
       table.text('notes')

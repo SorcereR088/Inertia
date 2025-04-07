@@ -20,7 +20,6 @@ export default class extends BaseSchema {
       table.timestamp('expires_at').notNullable()
     })
   }
-
   async down() {
     this.schema.dropTable(this.tableName)
   }

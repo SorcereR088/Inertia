@@ -5,6 +5,7 @@ import Course from './course.js'
 import Lesson from './lesson.js'
 import { compose } from '@adonisjs/core/helpers'
 import { WithOrganization } from './mixins/with_organization.js'
+import Module from './module.js'
 
 export default class Status extends compose(BaseModel, WithOrganization) {
   @column({ isPrimary: true })
@@ -30,6 +31,9 @@ export default class Status extends compose(BaseModel, WithOrganization) {
 
   @hasMany(() => Course)
   declare courses: HasMany<typeof Course>
+
+  @hasMany(() => Module)
+  declare modules: HasMany<typeof Module>
 
   @hasMany(() => Lesson)
   declare lessons: HasMany<typeof Lesson>

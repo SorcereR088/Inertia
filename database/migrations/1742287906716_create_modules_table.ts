@@ -20,7 +20,7 @@ export default class extends BaseSchema {
         .inTable('courses')
         .notNullable()
         .onDelete('cascade')
-      table.integer('status_is').unsigned().references('id').inTable('statuses').notNullable()
+      table.integer('status_id').unsigned().references('id').inTable('statuses').notNullable()
       table.string('name', 100).notNullable()
       table.text('notes')
       table.integer('order').unsigned().notNullable().defaultTo(0)
