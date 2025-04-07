@@ -53,7 +53,7 @@ export default class Organization extends BaseModel {
   getDifficulties(){
     return (<Organization>this).related('difficulties').query().orderBy('order')
   }
-
+  
   getAccessLevels(){
     return (<Organization>this).related('accessLevels').query().orderBy('order')
   }
