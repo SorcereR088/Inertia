@@ -49,7 +49,6 @@ const internalOpen = computed({
                     <Button v-else type="button" variant="destructive" @click="emit('confirm')" >{{ actionText }}</Button>
                 </AlertDialogAction>
             </AlertDialogFooter>
-
         </AlertDialogContent>
     </AlertDialog>
 </template>

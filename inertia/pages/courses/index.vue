@@ -76,7 +76,7 @@ watchEffect(() => {
               <DropdownMenuContent  class="bg-white">
                 <DropdownMenuItem :as="Link" :href="`/courses/${course.id}`">Open</DropdownMenuItem>
                 <DropdownMenuItem @click="actions.edit(course)">Edit</DropdownMenuItem>
-                <DropdownMenuItem>Delete</DropdownMenuItem>
+                <DropdownMenuItem @click="actions.destroy(course)">Delete</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </TableCell>

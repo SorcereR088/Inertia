@@ -5,6 +5,7 @@ import { courseValidator } from '#validators/course'
 import { withOrganizationMetaData } from '#validators/helpers/organizations'
 import StoreCourses from '../actions/courses/store_courses.js'
 import UpdateCourse from '../actions/courses/update_course.js'
+import DestroyCourse from '../actions/courses/destroy_course.js'
 
 export default class CoursesController {
   async index({ inertia, organization }: HttpContext) {
@@ -33,7 +34,15 @@ export default class CoursesController {
       organization,
       data,
     })
-
     return response.redirect().back()
+  }
+
+  async destroy({params, response, organization}: HttpContext){
+    await DestroyCourse.handle({
+      id: params.id,
+      organization
+    })
+
+    return response.redirect().toRoute('courses.index')
   }
 }
