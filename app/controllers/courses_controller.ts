@@ -6,6 +6,7 @@ import { withOrganizationMetaData } from '#validators/helpers/organizations'
 import StoreCourses from '../actions/courses/store_courses.js'
 import UpdateCourse from '../actions/courses/update_course.js'
 import DestroyCourse from '../actions/courses/destroy_course.js'
+import GetCourse from '../actions/courses/get_course.js'
 
 export default class CoursesController {
   async index({ inertia, organization }: HttpContext) {
@@ -18,13 +19,23 @@ export default class CoursesController {
 
   async store ({request, response, organization}: HttpContext){
     const data = await request.validateUsing(courseValidator, withOrganizationMetaData(organization.id))
-
     const course = await StoreCourses.handle({
       data,
       organization
     })
 
     return response.redirect().back()
+  }
+
+  async show({params, inertia, organization}: HttpContext){
+    const {course} = await GetCourse.handle({
+      id: params.id,
+      organization
+    })
+
+    return inertia.render('courses/show', {
+      course: new CourseDto(course)
+    })
   }
 
   async update ({params, request, response, organization}: HttpContext){
