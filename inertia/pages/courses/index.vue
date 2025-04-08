@@ -21,13 +21,13 @@ import { EllipsisVertical, Plus } from 'lucide-vue-next';
 import { Link } from '@inertiajs/vue3';
 import CourseActions from '../CourseActions.vue';
 
-const actions = ref()
 const props = defineProps<{
   organization: OrganizationDto;
   courses: CourseDto[];
 }>();
 
 const courses = ref<CourseDto[]>(props.courses);
+const actions = ref()
 
 
 watchEffect(() => {
@@ -73,9 +73,9 @@ watchEffect(() => {
               <DropdownMenuTrigger>
                 <EllipsisVertical class="w-4 h-4" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent  class="bg-white">
                 <DropdownMenuItem :as="Link" :href="`/courses/${course.id}`">Open</DropdownMenuItem>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
+                <DropdownMenuItem @click="actions.edit(course)">Edit</DropdownMenuItem>
                 <DropdownMenuItem>Delete</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

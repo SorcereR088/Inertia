@@ -27,9 +27,20 @@ dialog.value.open()
 nextTick(() => dialogFocusEl.value.inputEl.$el.focus())
 }
 
+function onEdit(course: CourseDto){
+    dialog.value.open(course, {
+        name: course.name,
+        statusId: course.statusId.toString(),
+        difficultyId: course.difficultyId.toString(),
+        accessLevelId: course.accessLevelId.toString(),
+    })
+    nextTick(() => dialogFocusEl.value.inputEl.$el.focus())
+}
+
 defineExpose({
-    create: onCreate
-})
+    create: onCreate,
+    edit: onEdit
+})  
 
 </script>
 
@@ -39,7 +50,8 @@ defineExpose({
     v-model:open="dialog.isOpen"
     :editing="dialog.resource?.id"
     :processing="form.processing"
-    @create="form.post('/courses', {onSuccess})">
+    @create="form.post('/courses', {onSuccess})"
+    @update="form.put(`/courses/${dialog.resource?.id}`, {onSuccess})">
 
         <FormInput ref="dialogFocusEl" label="Name" v-model="form.name" :error="form.errors.name" placeholder="My Cool Course" />
         <FormInput type="select" label="Access Level" v-model="form.accessLevelId" :error="form.errors.acccessLevelId">

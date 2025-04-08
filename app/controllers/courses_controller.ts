@@ -4,6 +4,7 @@ import CourseDto from '#dtos/course'
 import { courseValidator } from '#validators/course'
 import { withOrganizationMetaData } from '#validators/helpers/organizations'
 import StoreCourses from '../actions/courses/store_courses.js'
+import UpdateCourse from '../actions/courses/update_course.js'
 
 export default class CoursesController {
   async index({ inertia, organization }: HttpContext) {
@@ -20,6 +21,17 @@ export default class CoursesController {
     const course = await StoreCourses.handle({
       data,
       organization
+    })
+
+    return response.redirect().back()
+  }
+
+  async update ({params, request, response, organization}: HttpContext){
+    const data = await request.validateUsing(courseValidator, withOrganizationMetaData(organization.id))
+    await UpdateCourse.handle({
+      id: params.id,
+      organization,
+      data,
     })
 
     return response.redirect().back()

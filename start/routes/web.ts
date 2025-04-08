@@ -1,7 +1,7 @@
 const OrganizationsController = () => import('#controllers/organizations_controller')
 const DifficultiesController = () => import( '#controllers/difficulties_controller')
-const StatusController = () =>  import( '#controllers/statuses_controller')
 const accessLevelsController = ()  =>  import ( '#controllers/access_levels_controller')
+const StatusController = () =>  import( '#controllers/statuses_controller')
 const CoursesController = () => import ( '#controllers/courses_controller')
 
 import { middleware } from '#start/kernel'
@@ -47,6 +47,7 @@ router.group(() => {
       //Courses
     router.get('/courses', [CoursesController, 'index']).as('courses.index')
     router.post('/courses', [CoursesController, 'store']).as('courses.store')
+    router.put('/courses/:id', [CoursesController, 'update']).as('courses.update')
     
   }).use([middleware.auth(), middleware.organization()]) 
 

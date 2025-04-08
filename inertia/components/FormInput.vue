@@ -44,7 +44,7 @@ defineExpose({
       <span v-if="label">{{ label }}</span>
 
       <slot v-if="type === 'group'" />
-      
+
       <div v-else-if="type === 'color'" class="relative items-center w-full">
         <input v-model="internalValue" type="color" class="absolute inset-y-2 rounded w-6 h-6 start-2"
           :disabled="disabled" />
