@@ -6,6 +6,7 @@ import DifficultyDto from '#dtos/difficulty'
 import StatusDto from '#dtos/status'
 import ModuleDto from '#dtos/module'
 import LessonDto from '#dtos/lesson'
+import Organization from '#models/organization'
 
 export default class CourseDto extends BaseModelDto {
   declare id: number
@@ -23,7 +24,8 @@ export default class CourseDto extends BaseModelDto {
   declare difficulty: DifficultyDto | null
   declare status: StatusDto | null
   declare modules: ModuleDto[]
-  declare Lesson: LessonDto[]
+
+  declare meta: Record<string , any>
 
   constructor(course?: Course) {
     super()
@@ -44,6 +46,6 @@ export default class CourseDto extends BaseModelDto {
     this.difficulty = course.difficulty && new DifficultyDto(course.difficulty)
     this.status = course.status && new StatusDto(course.status)
     this.modules = ModuleDto.fromArray(course.modules)
-    this.Lesson = LessonDto.fromArray(course.lessons)
+    this.meta = course.$extras
   }
 }

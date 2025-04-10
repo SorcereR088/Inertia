@@ -21,6 +21,6 @@ export default class EmailHistoryDto extends BaseModelDto {
     this.emailNew = emailHistory.emailNew
     this.createdAt = emailHistory.createdAt.toISO()!
     this.updatedAt = emailHistory.updatedAt.toISO()!
-    this.users = emailHistory.users && new UsersDto(emailHistory.users)
+    this.users = emailHistory.user && new UsersDto(emailHistory.user)
   }
 }
