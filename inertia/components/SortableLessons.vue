@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import CourseDto from '#dtos/course';
 import ModuleDto from '#dtos/module';
+import LessonFormDto from '#dtos/lesson_form'
 import Organization from '#models/organization';
 import { EllipsisVertical, GripVertical, Pencil, Plus } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
@@ -17,6 +18,7 @@ import DropdownMenu from './ui/dropdown-menu/DropdownMenu.vue';
 import DropdownMenuContent from './ui/dropdown-menu/DropdownMenuContent.vue';
 import DropdownMenuItem from './ui/dropdown-menu/DropdownMenuItem.vue';
 import DropdownMenuTrigger from './ui/dropdown-menu/DropdownMenuTrigger.vue';
+import LessonDto from '#dtos/lesson';
 
 const props = defineProps<{
     organization: Organization
@@ -25,7 +27,6 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['update:modelValue'])
-const prefixUrl = computed(() => `/courses/${props.course.id}`)
 const dialogFocusEl = ref()
 
 const module = computed({
@@ -33,27 +34,28 @@ const module = computed({
     set: (value) => emit('update:modelValue', value)
 })
 
-const { form, dialog, destroy, onSuccess } = useResourceActions<ModuleDto>()({
+const { form, dialog, destroy, onSuccess } = useResourceActions<LessonDto>()<LessonFormDto>({
     name: '',
-    statusId: props.organization.statuses.at(0)?.id
+    statusId: props.organization.statuses.at(0)?.id,
+    accessLevelId: props.organization.accessLevels.at(0)?.id,
+    moduleId: module.value.id,
+    publishAtDate: null,
+    publishAtTime: null
 })
 
 function onCreate() {
     dialog.value.open()
     nextTick(() => dialogFocusEl.value.inputEl.$el.focus())
 }
-function onEdit(resource: ModuleDto) {
-    dialog.value.open(resource, {
-        name: resource.name,
-        statusId: resource.statusId
-    })
+function onEdit(resource: LessonDto) {
+    dialog.value.open(resource, new LessonFormDto(resource))
     nextTick(() => dialogFocusEl.value.inputEl.$el.focus())
 }
 
 </script>
 <template>
     <Sortable v-model="module.lessons" item-key="id" tag="ul" group="lessons" handle=".handle">
-        <template #item="{ element: lesson}">
+        <template #item="{ element: lesson }">
             <li class="flex flex-col border-b border-slate-200 pb-2 mb-2">
                 <div
                     class="flex items-center justify-between rounded-md p-2 hover:bg-slate-50 duration-300 group relative ">
@@ -67,13 +69,11 @@ function onEdit(resource: ModuleDto) {
                             {{ module.order }}/{{ lesson.order }}
                         </span>
 
-                        <span class="font-bold text-slate-700">{{ lesson.name }}</span>
+                        <span class="font-sm text-black">{{ lesson.name }}</span>
 
                         <div class="opacity-0 group-hover:opacity-100 duration-300 ml-2 relative">
-                            <Button variant="ghost" size="icon"
-                                class="absolute left-0 top-1/2 -translate-y-1/2 w-7 h-7"
-                                @click="onEdit(lesson)"
-                                >
+                            <Button variant="ghost" size="icon" class="absolute left-0 top-1/2 -translate-y-1/2 w-7 h-7"
+                                @click="onEdit(lesson)">
                                 <Pencil class="w-3.5 h-3.5" />
                             </Button>
                         </div>
@@ -81,7 +81,7 @@ function onEdit(resource: ModuleDto) {
                     <div class="flex gap-2 items-center justify-end ">
                         <DropdownMenu>
                             <DropdownMenuTrigger class="ml-2 text-slate-400 hover:text-slate-950 duration-300">
-                                <EllipsisVertical class="w-4 h-4"/>
+                                <EllipsisVertical class="w-4 h-4" />
 
                                 <DropdownMenuContent class="bg-white">
                                     <DropdownMenuItem @click="onEdit(lesson)">Edit</DropdownMenuItem>
@@ -100,18 +100,15 @@ function onEdit(resource: ModuleDto) {
         Add Lesson
     </Button>
 
-    <FormDialog resource="Lesson"
-        v-model:open="dialog.isOpen"
-        :editing="dialog.resource?.id"
-        :processing="form.processing"
-        @create="form.post(`/lessons`), {onSuccess, preserveScroll: true}"
-        @update="form.put(`/lesson/${dialog.resource?.id}`,{onSuccess, preserveScroll: true})">
+    <FormDialog resource="Lesson" v-model:open="dialog.isOpen" :editing="dialog.resource?.id"
+        :processing="form.processing" @create="form.post(`/lessons`, { onSuccess, preserveScroll: true })"
+        @update="form.put(`/lessons/${dialog.resource?.id}`, { onSuccess, preserveScroll: true })">
 
         <FormInput ref="dialogFocusEl" label="Name" v-model="form.name" :error="form.errors.name"
-            placeholder="My Module" />
+            placeholder="My Lesson" />
 
-        <FormInput type="select" label="Access Label" v-model="form.accessLevelId" :error="form.errors.accessLevelId">
-            <SelectItem v-for="label in props.organization.accessLevels" :key="level.id" :value="level.id">
+        <FormInput type="select" label="Access Level" v-model="form.accessLevelId" :error="form.errors.accessLevelId">
+            <SelectItem v-for="level in props.organization.accessLevels" :key="level.id" :value="level.id">
                 {{ level.name }}
             </SelectItem>
         </FormInput>
@@ -121,11 +118,11 @@ function onEdit(resource: ModuleDto) {
                 {{ status.name }}
             </SelectItem>
         </FormInput>
-
-        <ConfirmDestroyDialog v-model:open="destroy.isOpen" title="Delete Module?"
-            :action-href="`/lessons/${destroy.resource?.id}`">
-            Are you sure you'd like to your <strong>{{ destroy.resource?.name }}</strong> lesson ? All the modules data
-            including lessons, will be deleted forever.
-        </ConfirmDestroyDialog>
     </FormDialog>
+
+    <ConfirmDestroyDialog v-model:open="destroy.isOpen" title="Delete Lesson?"
+        :action-href="`/lessons/${destroy.resource?.id}`">
+        Are you sure you'd like to your <strong>{{ destroy.resource?.name }}</strong> lesson ? All the modules data
+        including lessons, will be deleted forever.
+    </ConfirmDestroyDialog>
 </template>

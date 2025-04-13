@@ -17,6 +17,7 @@ import DropdownMenu from './ui/dropdown-menu/DropdownMenu.vue';
 import DropdownMenuContent from './ui/dropdown-menu/DropdownMenuContent.vue';
 import DropdownMenuItem from './ui/dropdown-menu/DropdownMenuItem.vue';
 import DropdownMenuTrigger from './ui/dropdown-menu/DropdownMenuTrigger.vue';
+import SortableLessons from './SortableLessons.vue';
 
 const props = defineProps<{
     organization: Organization
@@ -64,8 +65,9 @@ function onEdit(resource: ModuleDto) {
                             <GripVertical class="w-4 h-4" />
                         </div>
                         <span class="font-bold text-slate-700">{{ module.name }}</span>
-                        <span class="text-slate-400 text-sm slashed-zero hidden md:inline-block">{{
-                            module.lesson?.length }} Lessons</span>
+                        
+                        <!-- error here -->
+                        <span class="text-slate-400 text-sm slashed-zero hidden md:inline-block">{{module.lessons?.length }} Lessons</span>
 
                         <div class="opacity-0 group-hover:opacity-100 duration-300 ml-2 relative">
                             <Button variant="ghost" size="icon"
@@ -89,20 +91,30 @@ function onEdit(resource: ModuleDto) {
                         </DropdownMenu>
                     </div>
                 </div>
+
+                <SortableLessons 
+                    v-model="modules[index]"
+                    :organization="organization"
+                    :course = "course"
+                />
             </li>
         </template>
     </Sortable>
 
-    <Button variant="ghost" size="sm" class="flex gap-2" @click="onCreate">
+    <ul>
+        <li class="px-2 ml-[3ch]">
+            <Button variant="ghost" size="sm" class="flex gap-2" @click="onCreate">
         <Plus class="w-4 h-4" />
         Add Module
     </Button>
+        </li>
+    </ul>
 
     <FormDialog resource="Series Module"
         v-model:open="dialog.isOpen"
         :editing="dialog.resource?.id"
         :processing="form.processing"
-        @create="form.post(`${prefixUrl}/modules`), {onSuccess, preserveScroll: true}"
+        @create="form.post(`${prefixUrl}/modules`,{onSuccess, preserveScroll: true})"
         @update="form.put(`${prefixUrl}/modules/${dialog.resource?.id}`,{onSuccess, preserveScroll: true})">
         <FormInput ref="dialogFocusEl" label="Name" v-model="form.name" :error="form.errors.name"
             placeholder="My Module" />
@@ -111,11 +123,11 @@ function onEdit(resource: ModuleDto) {
                 {{ status.name }}
             </SelectItem>
         </FormInput>
-
-        <ConfirmDestroyDialog v-model:open="destroy.isOpen" title="Delete Module?"
-            :action-href="`${prefixUrl}/modules/${destroy.resource?.id}`">
-            Are you sure you'd like to your <strong>{{ destroy.resource?.name }}</strong> module ? All the modules data
-            including lessons, will be deleted forever.
-        </ConfirmDestroyDialog>
     </FormDialog>
+    
+    <ConfirmDestroyDialog v-model:open="destroy.isOpen" title="Delete Module?"
+        :action-href="`${prefixUrl}/modules/${destroy.resource?.id}`">
+        Are you sure you'd like to your <strong>{{ destroy.resource?.name }}</strong> module ? All the modules data
+        including lessons, will be deleted forever.
+    </ConfirmDestroyDialog>
 </template>

@@ -61,6 +61,8 @@ router.group(() => {
 
     //Lessons
     router.post('/lessons', [LessonsController, 'store']).as('lessons.store')
+    router.put('/lessons/:id', [LessonsController,'update']).as('lessons.update')
+    router.delete('/lessons/:id', [LessonsController, 'destroy']).as('lessons.destroy')
     
   }).use([middleware.auth(), middleware.organization()]) 
 

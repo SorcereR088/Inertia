@@ -7,6 +7,7 @@ import ModuleDto from '#dtos/module'
 
 export default class LessonDto extends BaseModelDto {
   declare id: number
+  declare moduleId: number
   declare organizationId: number
   declare accessLevelId: number
   declare statusId: number
@@ -26,6 +27,7 @@ export default class LessonDto extends BaseModelDto {
 
     if (!lesson) return
     this.id = lesson.id
+    this.moduleId = lesson.moduleId
     this.organizationId = lesson.organizationId
     this.accessLevelId = lesson.accessLevelId
     this.statusId = lesson.statusId
