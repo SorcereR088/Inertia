@@ -29,8 +29,8 @@ export default class Lesson extends compose(BaseModel, WithOrganization) {
   @column()
   declare notes: string | null
 
-  @column.dateTime()
-  declare publishedAt: DateTime | null
+  @column.dateTime({ columnName: 'publishAt' })
+  declare publishAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

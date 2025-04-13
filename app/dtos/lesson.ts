@@ -34,7 +34,7 @@ export default class LessonDto extends BaseModelDto {
     this.name = lesson.name
     this.notes = lesson.notes
     this.order = lesson.order
-    this.publishAt = lesson.publishedAt?.toISO()!
+    this.publishAt = lesson.publishAt?.toISO()!
     this.createdAt = lesson.createdAt.toISO()!
     this.updatedAt = lesson.updatedAt.toISO()!
     this.organization = lesson.organization && new OrganizationDto(lesson.organization)
