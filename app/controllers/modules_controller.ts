@@ -1,5 +1,5 @@
 import { withOrganizationMetaData } from '#validators/helpers/organizations'
-import { moduleValidator } from '#validators/module'
+import { modulePatchTagValidator, moduleValidator } from '#validators/module'
 import type { HttpContext } from '@adonisjs/core/http'
 import StoreModule from '../actions/modules/store_module.js'
 import UpdateModule from '../actions/modules/update_module.js'
@@ -27,6 +27,16 @@ export default class ModulesController {
     return response.redirect().back()
     }
 
+    async tag({params, request, response, organization}: HttpContext){
+        const data = await request.validateUsing(modulePatchTagValidator, withOrganizationMetaData(organization.id))
+        await UpdateModule.handle({
+            id: params.id,
+            organization,
+            data
+        })
+
+        return response.redirect().back()
+    }
     
     async destroy({params, response, organization}:HttpContext){
         await DestroyModule.handle({

@@ -18,6 +18,7 @@ import DropdownMenuContent from './ui/dropdown-menu/DropdownMenuContent.vue';
 import DropdownMenuItem from './ui/dropdown-menu/DropdownMenuItem.vue';
 import DropdownMenuTrigger from './ui/dropdown-menu/DropdownMenuTrigger.vue';
 import SortableLessons from './SortableLessons.vue';
+import TagSelector from './TagSelector.vue';
 
 const props = defineProps<{
     organization: Organization
@@ -79,6 +80,13 @@ function onEdit(resource: ModuleDto) {
                         </div>
                     </div>
                     <div class="flex gap-2 items-center justify-end ">
+
+                        <TagSelector 
+                        v-model="module.statusId"
+                        :options="organization.statuses"
+                        :patch="{path: `${prefixUrl}/modules/${module.id}/tags`, key: 'statusId'}"
+                        />
+
                         <DropdownMenu>
                             <DropdownMenuTrigger class="ml-2 text-slate-400 hover:text-slate-950 duration-300">
                                 <EllipsisVertical class="w-4 h-4"/>

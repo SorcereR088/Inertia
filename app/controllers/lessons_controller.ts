@@ -1,5 +1,5 @@
 import { withOrganizationMetaData } from '#validators/helpers/organizations'
-import { lessonValidator } from '#validators/lesson'
+import { lessonPatchTagValidator, lessonValidator } from '#validators/lesson'
 import type { HttpContext } from '@adonisjs/core/http'
 import StoreLesson from '../actions/lessons/store_lesson.js'
 import UpdateLesson from '../actions/lessons/update_lesson.js'
@@ -27,6 +27,17 @@ export default class LessonsController {
 
         return response.redirect().back()
     }
+
+    async tag({params, request, response, organization}: HttpContext){
+        const data = await request.validateUsing(lessonPatchTagValidator, withOrganizationMetaData(organization.id))
+        await UpdateLesson.handle({
+                id: params.id,
+                organization,
+                data
+            })
+    
+            return response.redirect().back()
+        }
 
     async destroy ({params, response, organization}: HttpContext){
         await DestroyLesson.handle({
