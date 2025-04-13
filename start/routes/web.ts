@@ -4,6 +4,7 @@ const accessLevelsController = ()  =>  import ( '#controllers/access_levels_cont
 const StatusController = () =>  import( '#controllers/statuses_controller')
 const CoursesController = () => import ( '#controllers/courses_controller')
 const ModulesController = () => import('#controllers/modules_controller')
+const LessonsController = () => import ('#controllers/lessons_controller')
 
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
@@ -57,6 +58,9 @@ router.group(() => {
     router.post('/courses/:courseId/modules', [ModulesController, 'store']).as('modules.store')
     router.put('/courses/:courseId/modules/:id', [ModulesController, 'update']).as('modules.update')
     router.delete('courses/:courseId/modules/:id', [ModulesController, 'destroy']).as('modules.delete')
+
+    //Lessons
+    router.post('/lessons', [LessonsController, 'store']).as('lessons.store')
     
   }).use([middleware.auth(), middleware.organization()]) 
 

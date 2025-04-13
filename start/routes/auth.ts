@@ -10,16 +10,12 @@ router.post('/register', [RegisterController, 'store']).as('register.store').use
 
 router.get('/login', [LoginController, 'show']).as('login.show').use(middleware.guest())
 router.post('/login', [LoginController, 'store']).as('login.store').use(middleware.guest())
-
 router.post('/logout', [LogoutController, 'handle']).as('logout').use(middleware.auth())
 
-router
-  .group(() => {
+router.group(() => {
     router.get('/', [ForgotPasswordsController, 'index']).as('index')
     router.post('/', [ForgotPasswordsController, 'send']).as('send')
     router.get('/reset/:value', [ForgotPasswordsController, 'reset']).as('reset')
     router.post('/reset', [ForgotPasswordsController, 'update']).as('update')
   })
-  .prefix('/forgot-password')
-  .as('forgot-password')
-  .use(middleware.guest())
+  .prefix('/forgot-password').as('forgot-password').use(middleware.guest())

@@ -26,14 +26,6 @@ const internalModules = ref(structuredClone(toRaw(props.modules)))
 watchEffect(() =>  (internalCourse.value = {...props.course}))
 watchEffect(() => (internalModules.value = structuredClone(toRaw(props.modules))))
 
-console.log({
-  statusId: internalCourse.value.statusId,
-  statuses: props.organization.statuses,
-  difficultyId: internalCourse.value.difficultyId,
-  difficulties: props.organization.difficulties,
-  accessLevelId: internalCourse.value.accessLevelId,
-  accessLevels: props.organization.accessLevels
-})
 </script>
 <template>
     <AppHead :title="course.name" :description="`Manage your course ${course.name}`" />
