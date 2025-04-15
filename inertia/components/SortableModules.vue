@@ -53,14 +53,23 @@ function onEdit(resource: ModuleDto) {
     nextTick(() => dialogFocusEl.value.inputEl.$el.focus())
 }
 
-function onEditModuleChange(){
+function onModuleOrderChange(){
     const ids = modules.value.map((module) => module.id)
     router.patch(`${prefixUrl.value}/modules/order`, {ids}, {preserveScroll: true})
 }
 
+function onLessonOrderChange(){
+    const data = modules.value.map((module) => ({
+        id: module.id,
+        lessons: module.lessons.map((lesson) => lesson.id)
+    }))
+
+    router.patch(`${prefixUrl.value}/lessons/order`, {modules: data}, {preserveScroll: true})
+}
+
 </script>
 <template>
-    <Sortable v-model="modules" item-key="id" tag="ul" group="modules" handle=".handle" @end="onEditModuleChange">
+    <Sortable v-model="modules" item-key="id" tag="ul" group="modules" handle=".handle" @end="onModuleOrderChange">
         <template #item="{ element: module, index }">
             <li class="flex flex-col border-b border-slate-200 pb-2 mb-2">
                 <div
@@ -110,6 +119,7 @@ function onEditModuleChange(){
                     v-model="modules[index]"
                     :organization="organization"
                     :course = "course"
+                    @end="onLessonOrderChange"
                 />
             </li>
         </template>
