@@ -5,6 +5,7 @@ const StatusController = () =>  import( '#controllers/statuses_controller')
 const CoursesController = () => import ( '#controllers/courses_controller')
 const ModulesController = () => import('#controllers/modules_controller')
 const LessonsController = () => import ('#controllers/lessons_controller')
+const ProfileController = () => import('#controllers/settings/profile_controller')
 
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
@@ -67,6 +68,10 @@ router.group(() => {
     router.patch('/lessons/:id/tags', [LessonsController, 'tag']).as('lessons.tags')
     router.delete('/lessons/:id', [LessonsController, 'destroy']).as('lessons.destroy')
     router.patch('/courses/:courseId/lessons/order', [LessonsController, 'order']).as('lessons.order')
+
+    //Settings
+    router.get('/settings/profile', [ProfileController, 'index']).as('settings.profile.index')
+    router.put('/settings/profile', [ProfileController, 'update']).as('settings.profile.update')
     
   }).use([middleware.auth(), middleware.organization()]) 
 

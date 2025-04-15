@@ -36,7 +36,7 @@ const props = defineProps<{
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuLabel>Usename</DropdownMenuLabel>
+                        <DropdownMenuLabel>{{user.fullname}}</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem as-child>
                             <Link href="/settings/profile">Profile Settings</Link>
