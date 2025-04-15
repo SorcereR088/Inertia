@@ -19,6 +19,7 @@ import DropdownMenuItem from './ui/dropdown-menu/DropdownMenuItem.vue';
 import DropdownMenuTrigger from './ui/dropdown-menu/DropdownMenuTrigger.vue';
 import SortableLessons from './SortableLessons.vue';
 import TagSelector from './TagSelector.vue';
+import { router } from '@inertiajs/vue3';
 
 const props = defineProps<{
     organization: Organization
@@ -52,9 +53,14 @@ function onEdit(resource: ModuleDto) {
     nextTick(() => dialogFocusEl.value.inputEl.$el.focus())
 }
 
+function onEditModuleChange(){
+    const ids = modules.value.map((module) => module.id)
+    router.patch(`${prefixUrl.value}/modules/order`, {ids}, {preserveScroll: true})
+}
+
 </script>
 <template>
-    <Sortable v-model="modules" item-key="id" tag="ul" group="modules" handle=".handle">
+    <Sortable v-model="modules" item-key="id" tag="ul" group="modules" handle=".handle" @end="onEditModuleChange">
         <template #item="{ element: module, index }">
             <li class="flex flex-col border-b border-slate-200 pb-2 mb-2">
                 <div
