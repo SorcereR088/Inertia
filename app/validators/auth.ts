@@ -1,12 +1,14 @@
 import vine from '@vinejs/vine'
 
+export const newEmailRule = vine.string().email().normalizeEmail().unique(async (db, value) => {
+    const exists = await db.from('users').where('email', value).select('id').first()
+    return !exists
+})
+
 export const registerValidator = vine.compile(
     vine.object({
         fullname: vine.string().maxLength(255),
-        email: vine.string().email().normalizeEmail().unique(async (db, value) => {
-            const exists = await db.from('users').where('email', value).select('id').first()
-            return !exists
-        }),
+        email: newEmailRule.clone(),
         password: vine.string().minLength(8)
     })
 )

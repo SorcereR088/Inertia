@@ -1,7 +1,7 @@
 const RegisterController = () => import('#controllers/auth/register_controller')
 const LoginController = () => import('#controllers/auth/login_controller')
-const LogoutController = () => import('#controllers/auth/logout_controller')
 const ForgotPasswordsController = () => import('#controllers/auth/forgot_passwords_controller')
+const LogoutController = () => import('#controllers/auth/logout_controller')
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 

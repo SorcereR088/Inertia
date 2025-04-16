@@ -7,6 +7,7 @@ const ModulesController = () => import('#controllers/modules_controller')
 const LessonsController = () => import ('#controllers/lessons_controller')
 const ProfileController = () => import('#controllers/settings/profile_controller')
 
+import AccountsController from '#controllers/settings/accounts_controller'
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
@@ -72,6 +73,11 @@ router.group(() => {
     //Settings
     router.get('/settings/profile', [ProfileController, 'index']).as('settings.profile.index')
     router.put('/settings/profile', [ProfileController, 'update']).as('settings.profile.update')
+
+    //Settings(Account)
+    router.get('/settings/account', [AccountsController, 'index']).as('settiings.account.index')
+    router.put('/settings/account/email', [AccountsController, 'updateEmail']).as('settings.account.update')
+    router.delete('/settings/account/', [AccountsController, 'destroy']).as('settings.account.destroy')
     
   }).use([middleware.auth(), middleware.organization()]) 
 
