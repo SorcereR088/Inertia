@@ -1,6 +1,10 @@
 import { updateEmailValidator } from '#validators/setting'
 import type { HttpContext } from '@adonisjs/core/http'
 import UpdateUserEmail from '../../actions/settings/update_user_email.js'
+import vine from '@vinejs/vine'
+import DestroyUserAccount from '../../actions/settings/destroy_user_account.js'
+import { inject } from '@adonisjs/core'
+import WebLogout from '../../actions/auth/http/web_logout.js'
 
 export default class AccountsController {
   
@@ -21,6 +25,24 @@ export default class AccountsController {
     return response.redirect().back()
   }
   
-  async destroy({}: HttpContext) {}
+  @inject()
+  async destroy({request, response, session, auth}: HttpContext, webLogout: WebLogout) {
+    const user = auth.use('web').user!
+    const validator = vine.compile(
+      vine.object({
+        email: vine.string().in([user.email])
+      })
+    )
+
+    await request.validateUsing(validator)
+    await DestroyUserAccount.handle({user})
+
+    await webLogout.handle()
+    session.flash('success', 'Your account have been deleted')
+
+    return response.redirect().toRoute('register.show')
+
+
+  }
   
 }
